@@ -1,0 +1,21 @@
+{
+    "params":
+    {
+        "local_server": "True",
+        "local_uri": "mysql://root:@localhost/coding blog" ,
+        "prod_uri": "mysql://root:password@localhost/coding blog",
+        "blog_name": "Coding Blog",
+        "tag_line": "A blog liked by programmers",
+        "copy_right": "Copyright",
+        "user_gmail": "ayushv7011@gmail.com",
+        "user_pass": "rjayfiycjpjgdtos",
+        "no_of_posts": 2,
+        "admin_uname": "ayushv7011@gmail.com",
+        "admin_pass": "i",
+        "upload_location": "C:\\Users\\AYUSH VERMA\\Desktop\\Flask\\static\\assets\\img"
+    },
+    "passwords":
+    {
+
+    }
+}
