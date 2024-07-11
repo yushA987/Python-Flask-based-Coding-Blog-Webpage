@@ -13,6 +13,18 @@
                 </div>
             </div>
         </header>
+        <div style="height:60px">
+        {% with messages = get_flashed_messages(with_categories = true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                        {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
         <!-- Main Content-->
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -44,10 +56,16 @@
                     <!-- Post preview-->
                     
                     <!-- Pager-->
+                     {% if posts|length != 0 %}
                     <div class="clearfix">
                         <a class="btn btn-primary text-uppercase float-start" href="{{prev}}">&larr; Previous</a>
                         <a class="btn btn-primary text-uppercase float-end" href="{{ next }}">Next &rarr;</a>
                     </div>
+                    {% else %}
+                    <div class="container text-center">
+                        <h3>No posts as of now</h3>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

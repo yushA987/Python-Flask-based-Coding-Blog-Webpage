@@ -1,0 +1,126 @@
+{% extends 'layout.html' %}
+{% block content %}
+        <!-- Page Header-->
+        <header class="masthead mb-0" style="background-image: url('   {{ url_for('static', filename = 'assets/img/home-bg.jpg') }}  ')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            {% if admin %} 
+                            <h1>Admin Panel</h1>
+                            {%else%}
+                            <h1>User Panel</h1>
+                            {% endif %}
+                            <!-- <h1>Panel</h1> -->
+                            <span class="subheading">Manage and Update Posts Here</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Flash message starts here -->
+         <div style="height: 60px;">
+        {% with messages = get_flashed_messages(with_categories = true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                        {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
+        <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <h1>Basic Actions</h1>
+                    <hr>
+                    <a class = "btn btn-primary" href="/edit/0">Add a new Post</a>
+                    <a class = "btn btn-primary" href="/logout">Logout</a>
+                    <hr>
+                    <h1>Upload a file</h1>
+                    <form action="/uploader" method = "post" enctype="multipart/form-data">
+                        <input type="file" name = "file">
+                        <button class="btn btn-primary">Submit</button>
+                    </form>
+                    <hr>
+                    <h1>Edit Posts</h1>
+                    <hr>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">S.No.</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in posts %}
+
+                                <tr>
+                                    <th scope="row">{{post.sno}}</th>
+                                    <td><a href="/post/{{post.slug}}">{{post.title}}</a></td>
+                                    <td>{{post.time}} </td>
+                                    <!-- <td>@mdo</td> -->
+                                    {% set fname = 'post/edit/' + 'post.sno' %}
+                                    <td><a class = "btn btn-primary" href = "/edit/{{post.sno}}">Edit</a></td>
+                                    <!-- <td><a class = "btn btn-primary" href = "/confirmation/{{post.sno}}">Delete</a></td> -->
+                                    <!-- <td><form action="/delete/{{post.sno}}"><button class="btn btn-primary">Delete</button></form></td> -->
+                                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Delete
+                                    </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Confim Delete</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete the post?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                        <form action="/delete/{{post.sno}}"><button class="btn btn-primary">Delete</button></form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confim Delete..??</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you wan to delete the post?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <form action="/delete/{{posts.sno}}"><button class="btn btn-primary">Delete</button></form>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Footer-->
+        {% endblock %}
+
+<!-- {{url_for('static', filename = 'assets/img/home-bg.jpg')}} -->

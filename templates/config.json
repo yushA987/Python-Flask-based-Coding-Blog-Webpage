@@ -12,7 +12,8 @@
         "no_of_posts": 2,
         "admin_uname": "ayushv7011@gmail.com",
         "admin_pass": "i",
-        "upload_location": "C:\\Users\\AYUSH VERMA\\Desktop\\Flask\\static\\assets\\img"
+        "upload_location": "C:\\Users\\AYUSH VERMA\\Desktop\\Flask\\static\\assets\\img",
+        "user_status": "signedIn"
     },
     "passwords":
     {
