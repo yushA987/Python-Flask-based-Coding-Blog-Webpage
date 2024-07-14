@@ -132,10 +132,23 @@ def contact():
         # print(phone)
         email = request.form.get('email')
         mes = request.form.get('message')
-        entry = Contacts(name = name, phone = phone, email = email, mes = mes, date = datetime.now())
-        db.session.add(entry)
-        db.session.commit()
-        flash('Your form was successfully submitted! We will get back to you soon.', 'success')
+        if len(name) == 0:
+            flash("Name is an Important field", "danger")
+            return redirect("/contact")
+        elif len(phone) == 0:
+            flash("Phone Number is an important field", "danger")
+            return redirect("/contact")
+        elif len(email) == 0:
+            flash("Email is an important field", "danger")
+            return redirect("/contact")
+        elif len(mes) == 0:
+            flash("Message field is empty", "danger")
+            return redirect("/contact")
+        else:
+            entry = Contacts(name = name, phone = phone, email = email, mes = mes, date = datetime.now())
+            db.session.add(entry)
+            db.session.commit()
+            flash('Your form was successfully submitted! We will get back to you soon.', 'success')
         # msg = Message("New Message from Blog" + name,
         #     sender=email,
         #     recipients = params["user_gmail"],
@@ -240,29 +253,46 @@ def add(sno):
 
 @app.route('/uploader', methods=['POST'])
 def uploader():
-    if ('user' in session and session['user'] == params["admin_uname"]):
+    users = Users.query.filter_by().all()
+    if ('user' in session and (session['user'] == params["admin_uname"] or any(session["user"] == user.user_gmail for user in users))):
         if request.method == "POST":
             
             if 'file' not in request.files:
                 # return 'No file part'
                 flash('No file part, Try again..!!', "danger")
-                return redirect("/dashboard")
+                if session['user'] == params["admin_uname"]:
+                    return redirect("/dashboard")
+                else:
+                    return redirect("/user_dashboard")
     
             file = request.files['file']
     
             if file.filename == '':
                 flash("No selected File, Try again..!!", "danger")
-                return redirect("/dashboard")
+                if session['user'] == params["admin_uname"]:
+                    return redirect("/dashboard")
+                else:
+                    return redirect("/user_dashboard")
+                # return redirect("/dashboard")
                 # return 'No selected file'
             
             if file:
                 filename = file.filename
+                print(filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(filename)))
                 flash("File Uploaded Successfully", "success")
-                return redirect("/dashboard")
+                if session['user'] == params["admin_uname"]:
+                    return redirect("/dashboard")
+                else:
+                    return redirect("/user_dashboard")
+                # return redirect("/dashboard")
             else:
                 flash("Error, Try again..!!", "danger")
-                return redirect("/dashboard")
+                if session['user'] == params["admin_uname"]:
+                    return redirect("/dashboard")
+                else:
+                    return redirect("/user_dashboard")
+                # return redirect("/dashboard")
     else:
         # flash("Logged out Successfully", "success")
         return render_template("login.html", params = params)
@@ -348,7 +378,7 @@ def signIn():
         db.session.add(new_entry)
         db.session.commit()
         session["user"] = user_name 
-        flash("Signed in Successfully", "success")
+        flash("Welcome user!", "success")
         return redirect("/")
     
     return render_template("signIn.html", params = params)
